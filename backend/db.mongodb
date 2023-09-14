@@ -1,0 +1,63 @@
+//db
+use("Login-React")
+
+db.createCollection("users", {
+    capped: true,
+    size: 5000,
+    max: 50,
+    validator:{
+        $jsonSchema:{
+            bsonType: "object",
+            additionalProperties: false,
+            required : ['_id', 'email_registro', 'password_registro','rol'],
+            properties:{
+                _id:{
+                    bsonType: 'objectId',
+                    description : "El ID_ROL es un parametro obligatorio y debe ser un entero"
+                },
+                usuario_nickname:{  
+                    bsonType: 'string',
+                    description : "El ROL_NICKNAME es un parametro obligatorio y debe ser un string"
+                },
+                email_registro:{  
+                    bsonType: 'string',
+                    description : "El ROL_EMAIL es un parametro obligatorio y debe ser un string"
+                },
+                password_registro:{  
+                    bsonType: 'string',
+                    description : "El ROL_PASSWORD es un parametro obligatorio y debe ser un string"
+                },
+                rol:{  
+                    bsonType: 'int',
+                    description : "El NOMBRE_ROL es un parametro obligatorio y debe ser un int"
+                }
+            }
+        }
+    }
+})
+
+db.members.createIndex( { "email_registro": 1 }, { unique: true } )
+
+db.roles.insertMany([
+  {
+      _id: ObjectId(),
+      usuario_nickname: "camper",
+      email_registro: "camper@example.com",
+      password_registro: "camper123",
+      rol: 1
+  },
+  {
+      _id: ObjectId(),
+      usuario_nickname: "admin",
+      email_registro: "admin@example.com",
+      password_registro: "admin123",
+      rol: 2
+  },
+  {
+      _id: ObjectId(),
+      usuario_nickname: "trainer",
+      email_registro: "trainer@example.com",
+      password_registro: "trainer123",
+      rol: 3
+  }
+]);
