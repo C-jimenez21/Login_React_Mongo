@@ -1,8 +1,13 @@
 import app from './app.js';
-import dotenv from 'dotenv';
+import {loadEnv} from 'vite';
 
-dotenv.config("")
-let server = JSON.parse(process.env.MY_SERVER)
-app.listen(server, () => {
-    console.log(`Server listening on https://${server.hostname}:${server.port}`);
+const env = loadEnv("development", process.cwd(), "VITE")
+
+
+let config = {
+    port: env.VITE_PORT_BACKEND,
+    hostname: env.VITE_HOSTNAME
+}
+app.listen(config, () => {
+    console.log(`Server listening on https://${config.hostname}:${config.port}`);
 })

@@ -1,5 +1,5 @@
 import { SignJWT, jwtVerify } from "jose";
-import { token } from "morgan";
+
 
 const generateToken = async (payload) => {
     console.log({ "datauser": payload });

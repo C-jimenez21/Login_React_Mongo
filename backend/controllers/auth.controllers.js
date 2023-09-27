@@ -1,22 +1,24 @@
 import bcrypt from 'bcrypt'
 import { connection } from '../config/atlas.js'
-import { ObjectId, ReturnDocument } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { generateToken } from '../middlewares/Token.js';
 
 export const register = async (req, res) => {
-    const { username, email, password, rol } = req.body;
     try {
-        const passwordHash = await bcrypt.hash(password, 10)
-        console.log(passwordHash);
+        const { username, email, password, rol } = req.body;
         let db = await connection()
         let colecction = await db.collection('users')
-
+        let userExists = await colecction.findOne({ "email": email })
+        console.log(userExists);
+        if(userExists) {return res.status(404).json({error: ["This email is already register"]});}
+        const passwordHash = await bcrypt.hash(password, 10)
+        console.log(passwordHash);
         const newUser = {
             _id: new ObjectId(),
             username,
             email,
             password: passwordHash,
-            rol
+            rol: 1
         }
         console.log({ "user obj": newUser });
         const userSaved = await colecction.insertOne(newUser);
@@ -24,10 +26,12 @@ export const register = async (req, res) => {
         res.cookie('token', token);
         const user = await colecction.findOne({ _id: newUser._id });
         (userSaved.acknowledged) ? res.status(201).send({ message: 'User created successfully', user }) : res.status(404).send({ message: ' an error occurred with user creation' })
+        
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
+
 
 export const login = async (req, res) => {
 
