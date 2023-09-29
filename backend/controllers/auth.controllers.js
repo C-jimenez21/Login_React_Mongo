@@ -10,7 +10,7 @@ export const register = async (req, res) => {
         let colecction = await db.collection('users')
         let userExists = await colecction.findOne({ "email": email })
         console.log(userExists);
-        if(userExists) {return res.status(404).json({error: ["This email is already register"]});}
+        if(userExists) {return res.status(404).json({error:["This email is already register"]});}
         const passwordHash = await bcrypt.hash(password, 10)
         console.log(passwordHash);
         const newUser = {
@@ -22,7 +22,7 @@ export const register = async (req, res) => {
         }
         console.log({ "user obj": newUser });
         const userSaved = await colecction.insertOne(newUser);
-        const token = await generateToken({ id: newUser._id })
+        const token = await generateToken({ email: newUser.email })
         res.cookie('token', token);
         const user = await colecction.findOne({ _id: newUser._id });
         (userSaved.acknowledged) ? res.status(201).send({ message: 'User created successfully', user }) : res.status(404).send({ message: ' an error occurred with user creation' })
@@ -41,12 +41,12 @@ export const login = async (req, res) => {
         let colecction = await db.collection('users')
 
         const userFound = await colecction.findOne({ email: email })
-        if (!userFound) { return res.status(400).send({ message: 'User not found' }) }
+        if (!userFound) { return res.status(400).send({ error: ['User not found'] }) }
 
         const isMatch = await bcrypt.compare(password, userFound.password)
-        if (!isMatch) { return res.status(400).send({ message: 'Incorrect password' }) }
+        if (!isMatch) { return res.status(400).send({ error: ['Incorrect password'] }) }
 
-        const token = await generateToken({ id: userFound._id })
+        const token = await generateToken({ email: userFound.email })
         res.cookie('token', token);
         //res.set('Authorization', `${token}`)
         res.send(userFound)
@@ -63,11 +63,11 @@ export const logout = async (req, res) => {
 }
 
 export const profile = async (req, res) => {
-    let db = await connection()
-    let colecction = await db.collection('users')
-    const userFound = await colecction.findOne({ _id: new ObjectId(req.user.id) })
-    if (!userFound) { return res.status(400).send({ message: 'User not found' }) }
-    res.send({ status: 200, message: "hola  desde profile", data: userFound })
+    //let db = await connection()
+    //let colecction = await db.collection('users')
+    //const userFound = await colecction.findOne({ _id: new ObjectId(req.user.id) })
+    //if (!userFound) { return res.status(400).send({ message: 'User not found' }) }
+    res.status(200).json(req.user)
     //res.set('Authorization', `Bearer ${token}`)
 }
 

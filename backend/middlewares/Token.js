@@ -1,5 +1,9 @@
 import { SignJWT, jwtVerify } from "jose";
+import { connection } from '../config/atlas.js'
+import { loadEnv } from "vite";
+const env = loadEnv("development", process.cwd(), "JWT")
 
+        
 
 const generateToken = async (payload) => {
     console.log({ "datauser": payload });
@@ -9,7 +13,7 @@ const generateToken = async (payload) => {
         .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
         .setIssuedAt()
         .setExpirationTime('1h')
-        .sign(encoder.encode(process.env.JWT_SECRET));
+        .sign(encoder.encode(env.JWT_KEY));
     return jwtConstructor
 }
 
@@ -17,18 +21,21 @@ const validateToken = async (req, res, next) => {
     try {
         const { token } = req.cookies
         if(!token){return res.status(401).send({message: "Not token, authorization denied"})}
-        //console.log(token);
-        //let tokenRight = authorization.split(' ')[1];
         const encoder = new TextEncoder();
         const jwtData = await jwtVerify(
             token,
-            encoder.encode(process.env.JWT_SECRET)
+            encoder.encode(env.JWT_KEY)
             );
-        req.user = jwtData.payload;
+            let db = await connection()
+        let colecction =  db.collection('users')
+        const userFound = await colecction.findOne({email: jwtData.payload.email})
+    console.log(userFound);
+        if(!userFound) { return res.status(403).json({error: ['Invalid Token']}) }
+        req.user = userFound;
         next();
     } catch (error) {
         console.log(error);
-        return false;
+        return res.status(403).json({error: ['Invalid Token']})
     }
 }
 
