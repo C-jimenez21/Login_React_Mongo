@@ -1,21 +1,28 @@
 import React from 'react'
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import LandingPage from './components/LandingPage';
-import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
-import UserPage from './components/UserPage';
+import { AuthProvider } from './context/authContext';
+
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import HomePage from './pages/HomePage';
+import Profile from './pages/Profile';
+import ProtectedRoutes from './Auth/ProtectedRoutes';
 
 export default function App() {
   return (
-    <BrowserRouter>
-    <Routes>
-        <Route path='/' element={<LandingPage/>}  />
-        <Route path='/login' element={<SignIn/>}  />
-        <Route path='/register' element={<SignUp/>}  />
-        
-        
-        <Route path='/profile' element={<UserPage/>}  />
-    </Routes>
-    </BrowserRouter>
+    <AuthProvider >
+      <BrowserRouter>
+        <Routes>
+            <Route path='/' element={<HomePage/>}  />
+            <Route path='/login' element={<SignIn/>}  />
+            <Route path='/register' element={<SignUp/>}  />
+
+        <Route element={<ProtectedRoutes/>}>
+            <Route path='/profile' element={<Profile/>}  />
+            <Route path='/task' element={<Profile/>}  />
+        </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
