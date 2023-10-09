@@ -6,7 +6,6 @@ INFORMACION DEL PROYECTO
 
 Es un login creado usando REACt, NODE Y MONGODB que permite la entrada solo a usuarios registrados y mediante una Cookie mantiene la session abierta para manejar los permisos a los que este usuario tiene acceso
 
-
 ## Tecnologías Utilizadas
 
 - **MongoDB**: Base de datos NoSQL utilizada para almacenar información sobre libros, usuarios, préstamos y reservas.
@@ -17,17 +16,18 @@ Es un login creado usando REACt, NODE Y MONGODB que permite la entrada solo a us
 
 - **Node.js**: Entorno de tiempo de ejecución del lado del servidor para ejecutar el servidor web y la lógica de la aplicación.
 
-  
+
+​    
 
 ## Requisitos previos
 
 - Node js instalado en tu maquina (Recomendada v18.16.0)
 
-  - Instalación de Node usando NVM para Linux => nvm install v18.16.0
+- Instalación de Node usando NVM para Linux => nvm install v18.16.0
 
-  - Instalación de Node usando NVM para Windows => https://github.com/coreybutler/nvm-windows
+- Instalación de Node usando NVM para Windows => https://github.com/coreybutler/nvm-windows
 
-  - Verifica si se instaló correctamente:
+- Verifica si se instaló correctamente:
 
     ```bash
     node -v
@@ -36,7 +36,8 @@ Es un login creado usando REACt, NODE Y MONGODB que permite la entrada solo a us
 
 - MongoDB instalado y configurado con las credenciales necesarias para conectarse a la base de datos.
 
-  
+
+ 
 
 ## Instalación
 
@@ -52,21 +53,21 @@ https://github.com/C-jimenez21/Login_React_Mongo
 
 2. Una vez descargado nodejs y las dependencias crear el archivo **.env**, lo siguiente es la estructura que debe usar, tambien está en .env.example
 
-   ```gherkin
-    MY_SERVER={"hostname":"127.10.10.10", "port":5050}
+```gherkin
+MY_SERVER={"hostname":"127.10.10.10", "port":5050}
 ATLAS_USER="USUARIO DE ATLAS"
 ATLAS_PASSWORD="CLAVE DE ATLAS"
 ATLAS_DB="Login-React"
 JWT_SECRET="SECRETO DE JWT"
-   ```
+```
 
 3.  iniciar el backend: `npm run dev`
 
-   El servidor debería iniciarse y estar listo para recibir solicitudes en la dirección   `http://127.10.10.10:5050/` (puedes cambiar el puerto en el archivo `.env` si lo deseas).
+El servidor debería iniciarse y estar listo para recibir solicitudes en la dirección   `http://127.10.10.10:5050/` (puedes cambiar el puerto en el archivo `.env` si lo deseas).
 
 4. Establezca conección a atlas en mongo, luego dirijase al archivo **db.mongodb** Ubicado dentro la carpeta backend y ejecute el archivo (tenga en cuenta cambiar el cluster-code de acuerdo a su atlas)
 
-   `mongodb+srv://<user>:<password>@cluster0.<clusterCode>.mongodb.net/`
+`mongodb+srv://<user>:<password>@cluster0.<clusterCode>.mongodb.net/`
 
 
 
@@ -76,11 +77,9 @@ LOGIN / REGISTER
 
 En estas paginas el usuario se puede loguear o registrarse como usuario
 
-
 <img src="./Client/public/login.png">
 
 ​	<img src="./Client/public/register.png">
-
 
 ------
 
@@ -98,7 +97,6 @@ A continuación, se describen los endpoints disponibles en la aplicación junto 
 | Permite el logeo de un usuario existente | /login | POST    |
 | Permite el cierre de session del usuario logeado                                    | /logout     | POST   |
 | Trae los datos del cliente logeado                                           | /profile  | GET |
-
 
 
 
